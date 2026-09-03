@@ -7,7 +7,7 @@
     "variance": "variance"
   },
   "devDependencies": {
-    "@variance-authority/cli": "^0.1.0",
-    "@variance-authority/route-collector": "^0.1.0"
+    "@variance-authority/cli": "^0.1.1",
+    "@variance-authority/route-collector": "^0.1.1"
   }
 }
