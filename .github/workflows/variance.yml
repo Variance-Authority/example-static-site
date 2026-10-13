@@ -60,6 +60,11 @@ jobs:
           ref: ${{ github.head_ref || '' }}
           token: ${{ secrets.VARIANCE_PUSH_TOKEN || github.token }}
 
+      # The container runs as root and the workspace belongs to the runner's
+      # user, so git refuses the commit the label makes as "dubious ownership".
+      # The checkout above trusts the directory only for its own commands.
+      - run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: decide whether this run accepts
         id: accept
         env:
