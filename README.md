@@ -58,7 +58,7 @@ before you open a single image.
 Accept it and the new renderings become the baselines; revert the stylesheet
 and the next run is green with nothing to approve.
 
-## Why the baselines are not in this repository
+## Which baselines are in this repository
 
 A baseline belongs to the renderer that produced it. The identity above —
 `chromium@151.0.7922.34, darwin/arm64` — is part of where it is stored, so a
@@ -66,9 +66,27 @@ baseline recorded on a laptop is not found by a run on a Linux CI image, which
 correctly reports `new` rather than blaming a font stack for a diff it cannot
 explain.
 
-That is why baselines are generated where the pipeline runs, usually in a
-pinned container image, and committed from there. An example that shipped one
-person's macOS baselines would go red on the first machine that cloned it.
+So the baselines under [baselines/](baselines) were painted by CI, in the
+Playwright image its workflow pins, and committed through git-LFS. Your
+laptop's run writes its own identity's directory beside them. Leave it out of
+your commits.
+
+## On a pull request
+
+[`.github/workflows/variance.yml`](.github/workflows/variance.yml) renders
+both pages on every pull request and posts what changed as a comment. To accept
+a change, add the `variance: accept` label. The run accepts every changed page
+and commits the new images to your branch, so they arrive in the diff you
+approve and merge with the code that changed them.
+
+A commit pushed with the workflow's own token starts no workflow. Set a
+`VARIANCE_PUSH_TOKEN` secret with `contents: write`, and the accept commit gets
+a check of its own.
+
+Every week the variance-authority repository opens a pull request here that
+changes a price on `pricing.html`. It checks that the check goes red, accepts
+with the label, checks the commit that comes back, and closes the pull request
+without merging.
 
 ## What is where
 
@@ -77,6 +95,7 @@ person's macOS baselines would go red on the first machine that cloned it.
 | [variance.config.json](variance.config.json) | the whole configuration: viewport, browser, where baselines land |
 | [variance/routes.mjs](variance/routes.mjs) | turns every `.html` under `./site` into a subject, narrowed to its `<main>` |
 | [site/](site) | stands in for your build output — replace it with yours |
+| [baselines/](baselines) | the accepted images, stored through git-LFS |
 
 ## What this path does not do
 

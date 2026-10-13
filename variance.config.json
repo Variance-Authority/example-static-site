@@ -4,7 +4,7 @@
   "viewport": { "width": 900, "height": 600 },
   "retention": "durable",
   "subjects": { "kind": "collector", "collector": "variance/routes.mjs" },
-  "baselines": { "kind": "directory", "root": ".variance/baselines" },
+  "baselines": { "kind": "lfs", "root": "baselines" },
   "fonts": [],
   "report": "out/report.json"
 }

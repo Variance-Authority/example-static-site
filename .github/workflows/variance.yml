@@ -1,0 +1,81 @@
+name: variance
+
+# The pages in `site/` against the baselines committed under `baselines/`,
+# through git-LFS, on every pull request.
+#
+# The baselines are part of the repository, so accepting a change is a commit.
+# A reviewer adds the `variance: accept` label. This job then renders the pull
+# request, accepts every changed page, and pushes the new images to the pull
+# request's branch as `github-actions[bot]`. The images are in the diff you
+# approve, and they reach `main` with the code that changed them. The labelled
+# run stays red, because it found the change it committed. The push starts the
+# run that checks the new commit.
+#
+# The variance-authority repository opens a pull request here every week that
+# changes a price on `pricing.html`, watches the check go red, accepts it with
+# the label, and closes the pull request without merging. That is its
+# end-to-end test of the committed review flow.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+
+# `contents: write` is for the commit the label makes.
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  VARIANCE_REVIEW: git
+
+jobs:
+  variance:
+    if: >-
+      github.event.action != 'labeled' || github.event.label.name == 'variance: accept'
+    concurrency:
+      group: variance-${{ github.ref }}
+      cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+    runs-on: ubuntu-24.04
+    # The baselines were painted by this image's Chromium. It matches the
+    # `playwright` pinned in package.json.
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.0-noble
+      options: --ipc=host
+    steps:
+      # The image has no git-lfs, and the store refuses to read a pointer file
+      # as an image.
+      - run: apt-get update -qq && apt-get install -y -qq git-lfs
+
+      # The pull request's own branch rather than the merge, because the
+      # accept commits to it. The token is the one that push uses: a push made
+      # with `GITHUB_TOKEN` starts no workflow, so the commit would get no
+      # check. Set `VARIANCE_PUSH_TOKEN` to a token with `contents: write` here
+      # and the push starts the run that checks it.
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.head_ref || '' }}
+          token: ${{ secrets.VARIANCE_PUSH_TOKEN || github.token }}
+
+      - name: decide whether this run accepts
+        id: accept
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VARIANCE_ACCEPT_LABEL: 'variance: accept'
+          VARIANCE_PUSH_TOKEN_SET: ${{ secrets.VARIANCE_PUSH_TOKEN != '' }}
+        run: node .github/scripts/variance-accept.mjs
+
+      - run: npm ci
+
+      # Pinned to the commit tagged `@variance-authority/cli@0.15.0`, the CLI
+      # version package.json installs.
+      - uses: Variance-Authority/variance-authority/.github/actions/variance@6f680bb9196af71967574c89c23ad9e48348ee7e
+        with:
+          comment: ${{ github.event_name == 'pull_request' }}
+          intent: ${{ steps.accept.outputs.intent }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          commit-baselines: ${{ steps.accept.outputs.promote }}
+          to-accept: 'check the report, then add the **variance: accept** label. The accepted images are committed to this branch, and the next run compares against them.'
