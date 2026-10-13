@@ -1,0 +1,118 @@
+{
+  "documentDigest": "v1:c91b3f7ab42a7d2100b485e90409212c",
+  "identity": {
+    "renderer": "playwright-chromium",
+    "engine": "chromium@156.0.8078.4",
+    "platform": "linux/x64",
+    "deviceScaleFactor": 1,
+    "fonts": [],
+    "stabilization": "v1:80024b1adabdaed86c9f1578cedb626a",
+    "rasterization": "v1:330fe135bbab91e3e5de647c260709ee"
+  },
+  "width": 900,
+  "height": 290,
+  "missingFonts": [],
+  "components": [
+    {
+      "component": "(unattributed)",
+      "instances": 1,
+      "structure": "v1:9194ba8a2079f6291b0d65f6e04b06a7",
+      "semantics": "v1:882ac4c79b09057e8cb7b72b736cc24a",
+      "text": "v1:0c67f473cbf1137975d2303cba3c6e2e",
+      "style": "v1:b30137b975a447d9c86a78de4ec52188",
+      "geometry": "v1:5b9ef82dd87190841e96fb174c55388f",
+      "boxes": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 900,
+          "height": 290
+        }
+      ],
+      "values": {
+        "border-bottom-color": [
+          "rgb(214 218 224 / 1)"
+        ],
+        "border-bottom-left-radius": [
+          "6px"
+        ],
+        "border-bottom-right-radius": [
+          "6px"
+        ],
+        "border-bottom-style": [
+          "solid"
+        ],
+        "border-bottom-width": [
+          "1px"
+        ],
+        "border-left-color": [
+          "rgb(214 218 224 / 1)"
+        ],
+        "border-left-style": [
+          "solid"
+        ],
+        "border-left-width": [
+          "1px"
+        ],
+        "border-right-color": [
+          "rgb(214 218 224 / 1)"
+        ],
+        "border-right-style": [
+          "solid"
+        ],
+        "border-right-width": [
+          "1px"
+        ],
+        "border-top-color": [
+          "rgb(214 218 224 / 1)"
+        ],
+        "border-top-left-radius": [
+          "6px"
+        ],
+        "border-top-right-radius": [
+          "6px"
+        ],
+        "border-top-style": [
+          "solid"
+        ],
+        "border-top-width": [
+          "1px"
+        ],
+        "font-size": [
+          "28px"
+        ],
+        "margin-bottom": [
+          "0",
+          "16px",
+          "20px"
+        ],
+        "margin-left": [
+          "0"
+        ],
+        "margin-right": [
+          "0"
+        ],
+        "margin-top": [
+          "0"
+        ],
+        "padding-bottom": [
+          "20px",
+          "32px"
+        ],
+        "padding-left": [
+          "20px",
+          "32px"
+        ],
+        "padding-right": [
+          "20px",
+          "32px"
+        ],
+        "padding-top": [
+          "20px",
+          "32px"
+        ]
+      }
+    }
+  ],
+  "findingMarks": []
+}
